@@ -155,7 +155,7 @@ class TCMB_Kurlar
     {
         for ($i = 0; $i < count($this->currencies); $i++) {
             $currentCurrency = $this->currencies[$i];
-            $alanlar = $this->alanlar;
+            $alanlar = $this->getAlanlar();
 
             switch ($i) {
                 case 0:
@@ -476,20 +476,25 @@ class TCMB_Kurlar
         }
     }
 
+    public function getJSON()
+    {
+        $data = array();
+        for ($i = 0; $i < count($this->dovizKodlari); $i++) {
+            $data[$this->getDovizKodlari()[$i]] = $this->dovizler[$this->getDovizKodlari()[$i]];
+        }
+        return json_encode($data);
+    }
+
     /**
      * @param null $filename
      */
-    public function JSONGuncelle()
+    public function createJSONFile()
     {
         if (strlen($this->filename) == 0)
             $this->setFilename($this->defaultFilename);
         if (!$this->xmlStatus)
             return false;
-        $data = array();
-        for ($i = 0; $i < count($this->dovizKodlari); $i++) {
-            $data[$this->getDovizKodlari()[$i]] = $this->dovizler[$this->getDovizKodlari()[$i]];
-        }
-        if (file_put_contents($this->filename, json_encode($data)) != false)
+        if (file_put_contents($this->filename, $this->getJSON()) != false)
             return true;
         else
             return date("Y-m-d H:i:s") . " : JSON dosyası oluşturulamıyor!";
@@ -510,4 +515,5 @@ $doviz->setDovizKodlari(array(
 ));
 $doviz->getCurrencies();
 $doviz->setFilename("tcmb_" . date("Ymd_His") . ".json");
-$doviz->JSONGuncelle();
+echo $doviz->getJSON();
+$doviz->createJSONFile();
