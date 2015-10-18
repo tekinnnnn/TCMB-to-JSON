@@ -97,14 +97,24 @@ class TCMB_Kurlar
     private $xmlStatus;
 
     /**
+     * @var
+     */
+    private $dovizKodlari;
+
+    /**
+     * @var
+     */
+    private $alanlar;
+
+    /**
      * @param array $dovizKodu
      * @param array $alanlar
      */
-    function __construct($dovizKodlari = array(), $alanlar = array())
+    function __construct()
     {
 
         $file = "http://www.tcmb.gov.tr/kurlar/today.xml";
-        $this->filename = "TCMB_Kurlar.json"; // JSON çıktısının adı
+        $this->defaultFilename = "TCMB_Kurlar.json"; // JSON çıktısının adı
         if (@get_headers($file)[0] == 'HTTP/1.1 404 Not Found') {
             $this->xmlStatus = false;
             die(date("Y-m-d") . " : TCMB'den kurlar çekilemiyor!");
@@ -120,8 +130,8 @@ class TCMB_Kurlar
         if (date("N") < 6 && $this->attributes["Date"] != date('m-d-Y')) // hafta içiyse ve kurlar güncellenmemişse
             die(date("Y-m-d") . " : Kurlar bugüne ait değil, dolayısıyla değişmemiş!\n");
 
-        if (!isset($alanlar) || count($alanlar) == 0)
-            $this->alanlar = array(
+        if (count($this->getAlanlar()) == 0)
+            $this->setAlanlar(array(
                 "Unit",
                 "Isim",
                 "CurrencyName",
@@ -131,115 +141,110 @@ class TCMB_Kurlar
                 "BanknoteSelling",
                 "CrossRateUSD",
                 "CrossRateOther"
-            );
-        else
-            $this->alanlar = $alanlar;
+            ));
 
-        $this->degerleriAta($this->alanlar);
-
-        if (count($dovizKodlari) > 0) {
-            $this->dovizKodlari = $dovizKodlari;
-        } else {
-            $this->dovizKodlari = array("USD", "AUD", "DKK", "EUR", "GBP", "CHF", "SEK", "CAD", "KWD", "NOK", "SAR", "JPY", "BGN", "RON", "RUB", "IRR", "CNY", "PKR");
+        if (count($this->getDovizKodlari()) == 0) {
+            $this->setDovizKodlari(array("USD", "AUD", "DKK", "EUR", "GBP", "CHF", "SEK", "CAD", "KWD", "NOK", "SAR", "JPY", "BGN", "RON", "RUB", "IRR", "CNY", "PKR"));
         }
     }
 
     /**
-     * @param $alanlar
+     *
      */
-    private function degerleriAta($alanlar)
+    public function getCurrencies()
     {
         for ($i = 0; $i < count($this->currencies); $i++) {
             $currentCurrency = $this->currencies[$i];
+            $alanlar = $this->alanlar;
 
             switch ($i) {
                 case 0:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->USD[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 1:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->AUD[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 2:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->DKK[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 3:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->EUR[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 4:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->GBP[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 5:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->CHF[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 6:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->SEK[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 7:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->CAD[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 8:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->KWD[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 9:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->NOK[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 10:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->SAR[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 11:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->JPY[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 12:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->BGN[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 13:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->RON[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 14:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->RUB[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 15:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->IRR[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 16:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->CNY[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
                 case 17:
-                    for ($j = 0; $j < count($alanlar); $j++) {
+                    for ($j = 0; $j < count($this->alanlar); $j++) {
                         $this->PKR[$alanlar[$j]] = $this->str2float("{$currentCurrency->$alanlar[$j]}");
                     }
                     break;
@@ -266,6 +271,46 @@ class TCMB_Kurlar
             "CNY" => $this->CNY,
             "PKR" => $this->PKR
         );
+    }
+
+    /**
+     * @return array
+     */
+    public function getAlanlar()
+    {
+        return $this->alanlar;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDovizKodlari()
+    {
+        return $this->dovizKodlari;
+    }
+
+    /**
+     * @param array $dovizKodlari
+     */
+    public function setDovizKodlari($dovizKodlari)
+    {
+        $this->dovizKodlari = $dovizKodlari;
+    }
+
+    /**
+     * @param array $alanlar
+     */
+    public function setAlanlar($alanlar)
+    {
+        $this->alanlar = $alanlar;
+    }
+
+    /**
+     * @param string $filename
+     */
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
     }
 
     /**
@@ -436,19 +481,33 @@ class TCMB_Kurlar
      */
     public function JSONGuncelle()
     {
+        if (strlen($this->filename) == 0)
+            $this->setFilename($this->defaultFilename);
         if (!$this->xmlStatus)
             return false;
         $data = array();
         for ($i = 0; $i < count($this->dovizKodlari); $i++) {
-            $data[$this->dovizKodlari[$i]] = $this->dovizler[$this->dovizKodlari[$i]];
+            $data[$this->getDovizKodlari()[$i]] = $this->dovizler[$this->getDovizKodlari()[$i]];
         }
         if (file_put_contents($this->filename, json_encode($data)) != false)
             return true;
         else
             return date("Y-m-d H:i:s") . " : JSON dosyası oluşturulamıyor!";
     }
-
 }
 
-$doviz = new TCMB_Kurlar(array("EUR", "USD"), array("BanknoteBuying", "BanknoteSelling"));
+$doviz = new TCMB_Kurlar();
+$doviz->setAlanlar(array(
+    "CurrencyName",
+    "ForexBuying",
+    "ForexSelling",
+    "BanknoteBuying",
+    "BanknoteSelling"
+));
+$doviz->setDovizKodlari(array(
+    "USD",
+    "EUR"
+));
+$doviz->getCurrencies();
+$doviz->setFilename("tcmb_" . date("Ymd_His") . ".json");
 $doviz->JSONGuncelle();
