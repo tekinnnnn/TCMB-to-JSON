@@ -1,115 +1,35 @@
 <?php
 
-/**
- * Class TCMB_Kurlar
- */
 class TCMB_Kurlar
 {
-    /**
-     * @var
-     */
     public $USD; // ABD DOLARI
-    /**
-     * @var
-     */
     public $AUD; // AVUSTRALYA DOLARI
-    /**
-     * @var
-     */
     public $DKK; // DANİMARKA KRONU
-    /**
-     * @var
-     */
     public $EUR; // EURO
-    /**
-     * @var
-     */
     public $GBP; // İNGİLİZ STERLİNİ
-    /**
-     * @var
-     */
     public $CHF; // İSVİÇRE FRANGI
-    /**
-     * @var
-     */
     public $SEK; // İSVEÇ KRONU
-    /**
-     * @var
-     */
     public $CAD; // KANADA DOLARI
-    /**
-     * @var
-     */
     public $KWD; // KUVEYT DİNARI
-    /**
-     * @var
-     */
     public $NOK; // NORVEÇ KRONU
-    /**
-     * @var
-     */
     public $SAR; // SUUDİ ARABİSTAN RİYALİ
-    /**
-     * @var
-     */
     public $JPY; // JAPON YENİ
-    /**
-     * @var
-     */
     public $BGN; // BULGAR LEVASI
-    /**
-     * @var
-     */
     public $RON; // RUMEN LEYİ
-    /**
-     * @var
-     */
     public $RUB; // RUS RUBLESİ
-    /**
-     * @var
-     */
     public $IRR; // İRAN RİYALİ
-    /**
-     * @var
-     */
     public $CNY; // ÇİN YUANI
-    /**
-     * @var
-     */
     public $PKR; // PAKİSTAN RUPİSİ
 
-    /**
-     * @var SimpleXMLElement
-     */
     private $xml; // xml
-
-    /**
-     * @var SimpleXMLElement
-     */
-    private $attributes;
-    /**
-     * @var
-     */
-    private $currencies;
-    /**
-     * @var bool
-     */
+    private $attributes; // xml attributes
     private $xmlStatus;
 
-    /**
-     * @var
-     */
     private $dovizKodlari;
-
-    /**
-     * @var
-     */
     private $alanlar;
 
-    /**
-     * @param array $dovizKodu
-     * @param array $alanlar
-     */
+    private $currencies;
+
     function __construct()
     {
 
@@ -148,10 +68,17 @@ class TCMB_Kurlar
         }
     }
 
-    /**
-     *
-     */
-    public function getCurrencies()
+    public function setAlanlar($alanlar)
+    {
+        $this->alanlar = $alanlar;
+    }
+
+    public function setFilename($filename)
+    {
+        $this->filename = $filename;
+    }
+
+    public function setCurrencies()
     {
         for ($i = 0; $i < count($this->currencies); $i++) {
             $currentCurrency = $this->currencies[$i];
@@ -273,194 +200,151 @@ class TCMB_Kurlar
         );
     }
 
-    /**
-     * @return array
-     */
     public function getAlanlar()
     {
         return $this->alanlar;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getDovizKodlari()
     {
         return $this->dovizKodlari;
     }
 
-    /**
-     * @param array $dovizKodlari
-     */
     public function setDovizKodlari($dovizKodlari)
     {
         $this->dovizKodlari = $dovizKodlari;
     }
 
-    /**
-     * @param array $alanlar
-     */
-    public function setAlanlar($alanlar)
-    {
-        $this->alanlar = $alanlar;
-    }
 
-    /**
-     * @param string $filename
-     */
-    public function setFilename($filename)
-    {
-        $this->filename = $filename;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getUSD()
     {
         return $this->USD;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getAUD()
     {
         return $this->AUD;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getDKK()
     {
         return $this->DKK;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getEUR()
     {
         return $this->EUR;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getGBP()
     {
         return $this->GBP;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getCHF()
     {
         return $this->CHF;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getSEK()
     {
         return $this->SEK;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getCAD()
     {
         return $this->CAD;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getKWD()
     {
         return $this->KWD;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getNOK()
     {
         return $this->NOK;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getSAR()
     {
         return $this->SAR;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getJPY()
     {
         return $this->JPY;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getBGN()
     {
         return $this->BGN;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getRON()
     {
         return $this->RON;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getRUB()
     {
         return $this->RUB;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getIRR()
     {
         return $this->IRR;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getCNY()
     {
         return $this->CNY;
     }
 
-    /**
-     * @return mixed
-     */
+
     public function getPKR()
     {
         return $this->PKR;
     }
 
-    /**
-     * @param $str
-     * @return string | int | float
-     */
+    public function getJSON()
+    {
+        $data = array();
+        for ($i = 0; $i < count($this->dovizKodlari); $i++) {
+            $data[$this->getDovizKodlari()[$i]] = $this->dovizler[$this->getDovizKodlari()[$i]];
+        }
+        return json_encode($data);
+    }
+
+    public function createJSONFile()
+    {
+        if (strlen($this->filename) == 0)
+            $this->setFilename($this->defaultFilename);
+        if (!$this->xmlStatus)
+            return false;
+        if (file_put_contents($this->filename, $this->getJSON()) != false)
+            return true;
+        else
+            return date("Y-m-d H:i:s") . " : JSON dosyası oluşturulamıyor!";
+    }
+
     private function str2float($str)
     {
         $ayracPos = strpos($str, '.');
@@ -474,30 +358,6 @@ class TCMB_Kurlar
         } else {
             return $str * 1;
         }
-    }
-
-    public function getJSON()
-    {
-        $data = array();
-        for ($i = 0; $i < count($this->dovizKodlari); $i++) {
-            $data[$this->getDovizKodlari()[$i]] = $this->dovizler[$this->getDovizKodlari()[$i]];
-        }
-        return json_encode($data);
-    }
-
-    /**
-     * @param null $filename
-     */
-    public function createJSONFile()
-    {
-        if (strlen($this->filename) == 0)
-            $this->setFilename($this->defaultFilename);
-        if (!$this->xmlStatus)
-            return false;
-        if (file_put_contents($this->filename, $this->getJSON()) != false)
-            return true;
-        else
-            return date("Y-m-d H:i:s") . " : JSON dosyası oluşturulamıyor!";
     }
 }
 
@@ -513,7 +373,7 @@ $doviz->setDovizKodlari(array(
     "USD",
     "EUR"
 ));
-$doviz->getCurrencies();
+$doviz->setCurrencies();
 $doviz->setFilename("tcmb_" . date("Ymd_His") . ".json");
 echo $doviz->getJSON();
 $doviz->createJSONFile();
